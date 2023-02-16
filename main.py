@@ -5,7 +5,6 @@ from tkinter import messagebox
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.backends.backend_tkagg import NavigationToolbar2Tk
-from scipy.stats import norm
 import numpy as np
 from matplotlib.figure import Figure
 
@@ -29,7 +28,7 @@ def display_excel_file(filepath):
     df = pd.read_excel(filepath)
     # Get the columns "edad" and "raza"
     try:
-        df_numeric = df[["raza"]].apply(pd.to_numeric, errors='coerce')
+        # df_numeric = df[["raza"]].apply(pd.to_numeric, errors='coerce')
         # df_numeric = df_numeric.dropna()
         edad = df["edad"]
         raza = df["raza"]
@@ -50,7 +49,7 @@ def display_excel_file(filepath):
         barAge.get_tk_widget().pack(side=tk.LEFT, fill=tk.NONE)
         agesDataFrame = edad.round(
         decimals=0).value_counts().sort_index()
-        agesDataFrame.plot(kind='bar', legend=False, ax=axAge)
+        agesDataFrame.plot(kind='bar', legend=False, ax=axAge, color="g")
         axAge.set_title('Edad de los canes')
         axAge.set_xlabel("Edad")
         axAge.set_ylabel("Frecuencia")
@@ -62,25 +61,8 @@ def display_excel_file(filepath):
         barBreed = FigureCanvasTkAgg(breedsFigure, windowBreed)
         barBreed.get_tk_widget().pack(side=tk.RIGHT, fill=tk.NONE)
         breedsDataFrame = raza.value_counts().sort_index()
-        breedsDataFrame.plot(kind='bar', legend=False, ax=axBreed)
+        breedsDataFrame.plot(kind='bar', legend=False, ax=axBreed, color="r")
         axBreed.set_title('Raza de los canes')
-        #Plot the normal distribution of the raza column
-        # figBreed, axBreed = plt.subplots(figsize=(5, 5))
-        # x = np.linspace(raza.min(), raza.max(), 100)
-        # y = norm.pdf(x, raza.mean(), raza.std())
-        # axBreed.plot(x, y, 'b-', lw=2)
-        # axBreed.set_title("Distribución normal de la raza")
-        # axBreed.set_xlabel("Raza")
-        # axBreed.set_ylabel("Frecuencia")
-        # axBreed.tick_params(labelsize=4)
-
-
-        # Create a canvas for the second plot
-        # canvasBreed = FigureCanvasTkAgg(figBreed, master=windowBreed)
-        # canvasBreed.draw()
-        # canvasBreed.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
-
-        #Add the navigation toolbar to the plot window
         toolbar = NavigationToolbar2Tk(barBreed, windowBreed)
         toolbar.update()
     except Exception as e:
